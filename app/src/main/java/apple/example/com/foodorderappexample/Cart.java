@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,7 +34,7 @@ public class Cart extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
 
     FirebaseDatabase database;
-    DatabaseReference request;
+    DatabaseReference requests;
 
     TextView txtTotalPrice;
     Button btnPlace;
@@ -49,7 +50,7 @@ public class Cart extends AppCompatActivity {
 
         //Firebase
         database = FirebaseDatabase.getInstance();
-        request= database.getReference("Requests");
+        requests= database.getReference("Requests");
 
         //Init
         recyclerView = (RecyclerView)findViewById(R.id.listCart);
@@ -71,7 +72,7 @@ public class Cart extends AppCompatActivity {
         });
         
         
-        loadListFooed();
+        loadListFood();
     }
 
     private void showAlerdDialog() {
@@ -95,17 +96,31 @@ public class Cart extends AppCompatActivity {
                 //Create request
                 Request request = new Request(
                         Common.currentUser.getPhone(),
-                        Common.currentUser.getName(),
                         edtAddress.getText().toString(),
+                        Common.currentUser.getName(),
                         txtTotalPrice.getText().toString(),
                         cart);
+                //Submiting request to Firebase using System.CurrentMilliss
+                requests.child(String.valueOf(System.currentTimeMillis()))
+                        .setValue(request);
 
-                //PROVERIT SKOBKI I SINTAKSIS!!!!
+                //Delet cart
+                new Database(getBaseContext()).cleanCart();
+                Toast.makeText(Cart.this, "Thank you, Order placed", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
+
+        alerdDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alerdDialog.show();
     }
 
-    private void loadListFooed() {
+    private void loadListFood() {
 
 
         cart = new Database(this).getCarts();

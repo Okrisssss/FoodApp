@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.google.firebase.database.DataSnapshot;
@@ -86,8 +87,11 @@ public class FoodDetail extends AppCompatActivity {
                         numberButton.getNumber(),
                         currentFood.getPrice(),
                         currentFood.getDiscount()
+                        
+                        
 
                 ));
+                Toast.makeText(FoodDetail.this, "Food was added in your cart", Toast.LENGTH_SHORT).show();
             }
         });
     }
