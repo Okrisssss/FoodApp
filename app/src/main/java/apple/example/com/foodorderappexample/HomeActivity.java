@@ -3,7 +3,6 @@ package apple.example.com.foodorderappexample;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +26,7 @@ import apple.example.com.foodorderappexample.Interface.ItemClickListener;
 import apple.example.com.foodorderappexample.Model.Category;
 import apple.example.com.foodorderappexample.ViewHolder.MenuViewHolder;
 
-public class Home extends AppCompatActivity
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
@@ -57,8 +55,7 @@ public class Home extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-
-                Intent cartIntent = new Intent(Home.this, Cart.class);
+                Intent cartIntent = new Intent(HomeActivity.this, CartActivity.class);
                 startActivity(cartIntent);
             }
         });
@@ -68,28 +65,21 @@ public class Home extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         //Set Name for user
-
         View headerView = navigationView.getHeaderView(0);
         txtFullName = (TextView) headerView.findViewById(R.id.txtFullName);
         txtFullName.setText(Common.currentUser.getName());
 
-
-
         //Load menu
-
         recycler_menu = (RecyclerView) findViewById(R.id.recycler_menu);
         recycler_menu.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recycler_menu.setLayoutManager(layoutManager);
 
         loadMenu();
-
     }
 
     private void loadMenu() {
@@ -105,11 +95,10 @@ public class Home extends AppCompatActivity
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        //Toast.makeText(Home.this, "" + clickItem.getName(), Toast.LENGTH_SHORT).show();
 
                         //Get Category ID
 
-                        Intent foodList = new Intent(Home.this, FoodList.class);
+                        Intent foodList = new Intent(HomeActivity.this, FoodListActivity.class);
                         foodList.putExtra("CategoryId", adapter.getRef(position).getKey());
                         startActivity(foodList);
                     }
@@ -148,12 +137,19 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_menu) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_cart) {
+            Intent cartIntent = new Intent(HomeActivity.this, CartActivity.class);
+            startActivity(cartIntent);
 
         } else if (id == R.id.nav_order) {
+            Intent orderIntent = new Intent(HomeActivity.this, OrderStatusActivity.class);
+            startActivity(orderIntent);
 
         } else if (id == R.id.nav_log_out) {
+            Intent signIn = new Intent(HomeActivity.this, SignInActivity.class);
+            signIn.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(signIn);
 
         }
 

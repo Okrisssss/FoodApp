@@ -18,19 +18,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import apple.example.com.foodorderappexample.Database.Database;
+import apple.example.com.foodorderappexample.Database.DatabaseOrderInformation;
 import apple.example.com.foodorderappexample.Model.Food;
 import apple.example.com.foodorderappexample.Model.Order;
 
-public class FoodDetail extends AppCompatActivity {
+public class FoodDetailActivity extends AppCompatActivity {
 
 
-    TextView food_name, food_price, food_description;
+    TextView food_name;
+    TextView food_price;
+    TextView food_description;
     ImageView food_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
     FloatingActionButton btnCart;
     ElegantNumberButton numberButton;
-
 
     String foodID = "";
 
@@ -50,48 +51,35 @@ public class FoodDetail extends AppCompatActivity {
         foods = database.getReference("Foods");
 
         //Init view
-
-
         numberButton = (ElegantNumberButton) findViewById(R.id.number_button);
         btnCart = (FloatingActionButton) findViewById(R.id.btnCart);
-
-
         food_name = (TextView) findViewById(R.id.food_name);
         food_price = (TextView) findViewById(R.id.food_price);
         food_description = (TextView) findViewById(R.id.food_description);
         food_image = (ImageView) findViewById(R.id.image_food);
-
-
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppbar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapseAppbar);
 
 
         //Get food ID from intent
-
         if (getIntent() != null)
-
             foodID = getIntent().getStringExtra("FoodId");
-
         if (!foodID.isEmpty()){
-
             getDetailFood(foodID);
         }
 
         btnCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Database(getBaseContext()).addToCart(new Order(
+                new DatabaseOrderInformation(getBaseContext()).addToCart(new Order(
                         foodID,
                         currentFood.getName(),
                         numberButton.getNumber(),
                         currentFood.getPrice(),
                         currentFood.getDiscount()
-                        
-                        
-
                 ));
-                Toast.makeText(FoodDetail.this, "Food was added in your cart", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FoodDetailActivity.this, "Food was added in your cart", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -105,7 +93,6 @@ public class FoodDetail extends AppCompatActivity {
                 currentFood = dataSnapshot.getValue(Food.class);
 
                 Picasso.with(getBaseContext()).load(currentFood.getImage()).into(food_image);
-
 
                 food_name.setText(currentFood.getName());
                 collapsingToolbarLayout.setTitle(currentFood.getName());

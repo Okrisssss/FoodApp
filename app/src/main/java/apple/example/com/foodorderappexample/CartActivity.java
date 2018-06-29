@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Locale;
 
 import apple.example.com.foodorderappexample.Common.Common;
-import apple.example.com.foodorderappexample.Database.Database;
+import apple.example.com.foodorderappexample.Database.DatabaseOrderInformation;
 import apple.example.com.foodorderappexample.Model.Order;
 import apple.example.com.foodorderappexample.Model.Request;
 import apple.example.com.foodorderappexample.ViewHolder.CartAdapter;
 
-public class Cart extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity {
 
 
     RecyclerView recyclerView;
@@ -52,7 +52,7 @@ public class Cart extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         requests= database.getReference("Requests");
 
-        //Init
+        //Init view
         recyclerView = (RecyclerView)findViewById(R.id.listCart);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -61,26 +61,21 @@ public class Cart extends AppCompatActivity {
         txtTotalPrice = (TextView) findViewById(R.id.total);
         btnPlace = (Button) findViewById(R.id.btnPlaceOrder);
 
-
         btnPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            //Create new request
-
              showAlerdDialog();
             }
         });
-        
-        
         loadListFood();
     }
-
+    //Create new request
     private void showAlerdDialog() {
 
-        AlertDialog.Builder alerdDialog = new AlertDialog.Builder(Cart.this);
+        AlertDialog.Builder alerdDialog = new AlertDialog.Builder(CartActivity.this);
         alerdDialog.setTitle("One more step!");
         alerdDialog.setMessage("Enter your Address: ");
-        final EditText edtAddress = new EditText(Cart.this);
+        final EditText edtAddress = new EditText(CartActivity.this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
@@ -92,7 +87,6 @@ public class Cart extends AppCompatActivity {
         alerdDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 //Create request
                 Request request = new Request(
                         Common.currentUser.getPhone(),
@@ -104,9 +98,9 @@ public class Cart extends AppCompatActivity {
                 requests.child(String.valueOf(System.currentTimeMillis()))
                         .setValue(request);
 
-                //Delet cart
-                new Database(getBaseContext()).cleanCart();
-                Toast.makeText(Cart.this, "Thank you, Order placed", Toast.LENGTH_SHORT).show();
+                //Delete cart
+                new DatabaseOrderInformation(getBaseContext()).cleanCart();
+                Toast.makeText(CartActivity.this, "Thank you, Order placed", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -122,20 +116,17 @@ public class Cart extends AppCompatActivity {
 
     private void loadListFood() {
 
-
-        cart = new Database(this).getCarts();
+        cart = new DatabaseOrderInformation(this).getCarts();
         adapter = new CartAdapter(cart,this);
         recyclerView.setAdapter(adapter);
 
         //Calculate total price
         int total = 0;
-
         for (Order order :cart)
             total+=(Integer.parseInt(order.getPrice()))*(Integer.parseInt(order.getQuantity()));
 
         Locale locale = new Locale("en", "US");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
-
         txtTotalPrice.setText(fmt.format(total));
     }
 }

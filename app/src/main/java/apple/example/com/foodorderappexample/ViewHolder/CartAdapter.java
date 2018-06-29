@@ -25,22 +25,21 @@ import apple.example.com.foodorderappexample.R;
 
 class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-    public TextView txt_cart_name, txt_price;
-    public ImageView img_cart_count;
-
+    public TextView cartPrice;
+    public TextView cartName;
+    public ImageView cartCountImg;
 
     private ItemClickListener itemClickListener;
 
-    public void setTxt_cart_name(TextView txt_cart_name) {
-        this.txt_cart_name = txt_cart_name;
+    public void setCartName(TextView cartName) {
+        this.cartName = cartName;
     }
 
     public CartViewHolder(View itemView) {
         super(itemView);
-
-        txt_cart_name = (TextView)itemView.findViewById(R.id.cart_item_name);
-        txt_price = (TextView)itemView.findViewById(R.id.cart_item_price);
-        img_cart_count = (ImageView) itemView.findViewById(R.id.cart_item_count);
+        cartName = (TextView)itemView.findViewById(R.id.cart_item_name);
+        cartPrice = (TextView)itemView.findViewById(R.id.cart_item_price);
+        cartCountImg = (ImageView) itemView.findViewById(R.id.cart_item_count);
     }
 
     @Override
@@ -71,14 +70,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
 
-        TextDrawable drawable = TextDrawable.builder()
-                .buildRound(""+listData.get(position).getQuantity(), Color.RED);
-        holder.img_cart_count.setImageDrawable(drawable);
+        TextDrawable drawable = TextDrawable.builder().buildRound(""+listData.get(position).getQuantity(), Color.RED);
+        holder.cartCountImg.setImageDrawable(drawable);
         Locale locale = new Locale("en", "US");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
-        int price  = (Integer.parseInt(listData.get(position).getPrice()))* (Integer.parseInt(listData.get(position).getQuantity()));
-        holder.txt_price.setText(fmt.format(price));
-        holder.txt_cart_name.setText(listData.get(position).getProductName());
+        int price  = (Integer.parseInt(listData.get(position).getPrice()))*(Integer.parseInt(listData.get(position).getQuantity()));
+        holder.cartPrice.setText(fmt.format(price));
+        holder.cartName.setText(listData.get(position).getProductName());
     }
 
     @Override

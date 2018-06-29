@@ -12,13 +12,13 @@ import java.util.List;
 
 import apple.example.com.foodorderappexample.Model.Order;
 
-public class Database extends SQLiteAssetHelper{
+public class DatabaseOrderInformation extends SQLiteAssetHelper{
 
     private static final String DB_NAME = "EatitDB.db";
     private static final int DB_VERSION = 1;
 
 
-    public Database(Context context) {
+    public DatabaseOrderInformation(Context context) {
 
         super(context, DB_NAME, null, DB_VERSION);
     }

@@ -17,9 +17,11 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import apple.example.com.foodorderappexample.Model.User;
 
-public class SignUp extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
-    MaterialEditText edtPhone, edtPassword, edtName;
+    MaterialEditText edtPhone;
+    MaterialEditText edtPassword;
+    MaterialEditText edtName;
     Button btnSignUp;
 
     @Override
@@ -33,20 +35,16 @@ public class SignUp extends AppCompatActivity {
         btnSignUp = (Button) findViewById(R.id.btnSignUp1);
 
         //Init Firebase
-
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference table_user = database.getReference("User");
-
-
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final ProgressDialog mDialog  = new ProgressDialog(SignUp.this);
+                final ProgressDialog mDialog  = new ProgressDialog(SignUpActivity.this);
                 mDialog.setMessage("Please waiting....");
                 mDialog.show();
-
 
                 table_user.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -55,24 +53,20 @@ public class SignUp extends AppCompatActivity {
                         if (dataSnapshot.child(edtPhone.getText().toString()).exists()){
 
                             mDialog.dismiss();
-                            Toast.makeText(SignUp.this, "Phone number already exist", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "Phone number already exist", Toast.LENGTH_SHORT).show();
                         }
                         else {
-
                             mDialog.dismiss();
                             User user = new User(edtName.getText().toString(), edtPassword.getText().toString());
                             table_user.child(edtPhone.getText().toString()).setValue(user);
-                            Toast.makeText(SignUp.this, "Sign up successfully !!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "Sign up successfully !!", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
                     }
                 });
-
             }
         });
 

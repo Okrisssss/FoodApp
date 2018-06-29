@@ -18,15 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignIn" />
-        <activity android:name=".SignUp" />
+        <activity android:name=".SignInActivity" />
+        <activity android:name=".SignUpActivity" />
         <activity
-            android:name=".Home"
+            android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
-        <activity android:name=".FoodList" />
-        <activity android:name=".FoodDetail" />
-        <activity android:name=".Cart"></activity>
+        <activity android:name=".FoodListActivity" />
+        <activity android:name=".FoodDetailActivity" />
+        <activity android:name=".CartActivity" />
+        <activity android:name=".OrderStatusActivity"></activity>
     </application>
 
 </manifest>
